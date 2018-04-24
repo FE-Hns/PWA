@@ -55,11 +55,47 @@ PWA 还可以离线工作。使用 Service Workers，你可以选择性地缓存
 * 运行在它自己的全局脚本上下文中
 * 不绑定到具体的网页
 * 无法修改网页中的元素，因为它无法访问 DOM
-* 只能使用 HTTPS
+* 只能使用 HTTPS（出于安全原因的考虑）
+
+工作原理图示
+
+[![pic01.png](https://i.loli.net/2018/04/24/5adee305aca48.png)](https://i.loli.net/2018/04/24/5adee305aca48.png)
+
+于是我们得出几点：
+1. Service Worker 运行在 worker 上下文中，这意味着它无法访问 DOM，它与应用的主要 JavaScript 运行在不同的线程上，所以它不会被阻塞。
+2. 它们被设计成是完全异步的，因此你无法使用诸如同步 XHR 和 localStorage 之类的功能。
+3. 在上面的图中，你可以看到 Service Worker 处于不同的线程，并且可以拦截网络请求。可以把它理解为"调度员"，它可以让你全权控制网站中所有进出的网络请求。这种能力使它们极其强大，并允许你来决定如何响应请求
+
+### 1.2.2 Service Worker 的生命周期
+
+Service Worker很像一个应用，在使用之前你需要下载安装注册等等步骤。。
+
+[![生命周期](https://raw.githubusercontent.com/SangKa/PWA-Book-CN/master/assets/figure1.4.png)](https://raw.githubusercontent.com/SangKa/PWA-Book-CN/master/assets/figure1.4.png)
 
 
+### 1.2.3 基础示例
 
-
+举一个最简单的例子，来展示。
+
+```html
+<html>
+  <head>The best web page ever</head>
+  <body>
+  <script>
+    // 注册 service worker
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('/sw.js').then(function(registration) {
+        // 注册成功
+        console.log('ServiceWorker registration successful with scope: ', registration.scope);         
+      }).catch(function(err) {
+        // 注册失败 :(
+        console.log('ServiceWorker registration failed: ', err);
+      });
+    }
+  </script>
+  </body>
+</html>
+```
 
 
 
