@@ -96,6 +96,13 @@ PWA 还可以离线工作。使用 Service Workers，你可以选择性地缓存
   </body>
 </html>
 ```
+代码说明：
+
+1. 检查当前浏览器是否支持 Service Workers
+2. 如果支持，注册一个叫做 'sw.js' 的 Service Worker 文件
+3. 如果成功则打印到控制台
+4. 如果发生错误，捕获错误并打印到控制台
+
 
 
 
