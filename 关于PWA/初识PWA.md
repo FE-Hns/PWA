@@ -75,7 +75,7 @@ PWA 还可以离线工作。使用 Service Workers，你可以选择性地缓存
 
 ### 1.2.3 基础示例
 
-举一个最简单的例子，来展示。
+举一个最简单的例子，来展示，来看看最简单的使用方式。
 
 ```html
 <html>
@@ -102,6 +102,24 @@ PWA 还可以离线工作。使用 Service Workers，你可以选择性地缓存
 2. 如果支持，注册一个叫做 'sw.js' 的 Service Worker 文件
 3. 如果成功则打印到控制台
 4. 如果发生错误，捕获错误并打印到控制台
+
+在上边的基础之上，我们继续往下进行，如果现在我们有一个需求是这样子的。如果我们请求中含有jpg图片，那么就把它替换成某个图片。
+
+之前我提到过 Service Workers 是事件驱动的，而且 Service Workers 最强大的功能之一就是允许你通过进入 fetch 事件来监听任何网络请求。当一个资源发起 fetch 事件时，你可以决定如何继续进行。你可以将发出的 HTTP 请求或接收的 HTTP 响应更改成任何内容。这相当简单，但同时却非常强大！
+
+```js
+self.addEventListener('fetch', function(event) {     ❶
+  if (/\.jpg$/.test(event.request.url)) {            ❷
+    event.respondWith(fetch('/images/unicorn.jpg')); ❸
+  }
+});
+```
+
+### 1.2.4 安全考虑
+
+既然Service Worker 可以拦截请求，那么同时这也是非常危险的。比如外部可以通过拦截请求，然后指向危险的代码。所以，出于安全方面的考虑，为了避免这种情况发送，Service Worker 只能在通过 HTTPS 提供服务的网页上注册。这确保了网页在通过网络的过程中没有被篡改。
+
+
 
 
 
