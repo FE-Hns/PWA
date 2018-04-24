@@ -108,9 +108,9 @@ PWA 还可以离线工作。使用 Service Workers，你可以选择性地缓存
 之前我提到过 Service Workers 是事件驱动的，而且 Service Workers 最强大的功能之一就是允许你通过进入 fetch 事件来监听任何网络请求。当一个资源发起 fetch 事件时，你可以决定如何继续进行。你可以将发出的 HTTP 请求或接收的 HTTP 响应更改成任何内容。这相当简单，但同时却非常强大！
 
 ```js
-self.addEventListener('fetch', function(event) {     ❶
-  if (/\.jpg$/.test(event.request.url)) {            ❷
-    event.respondWith(fetch('/images/unicorn.jpg')); ❸
+self.addEventListener('fetch', function(event) {     
+  if (/\.jpg$/.test(event.request.url)) {            
+    event.respondWith(fetch('/images/unicorn.jpg')); 
   }
 });
 ```
