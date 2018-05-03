@@ -50,7 +50,7 @@ PWA 还可以离线工作。使用 Service Workers，你可以选择性地缓存
 
 Service Workers 可以让你全权控制网站发起的每一个请求，这为许多不同的使用场景开辟了可能性。Service Worker 的行为方式也是如此，它可以重定向你的请求，甚至彻底停止。
 
-虽然Service Workers是由JS编写完成，但是与一般的JS文件存在这些许差异。差异主要体现在如下几点
+虽然Service Workers是由JS编写完成，但是与一般的JS文件存在着些许差异。差异主要体现在如下几点
 
 * 运行在它自己的全局脚本上下文中
 * 不绑定到具体的网页
@@ -59,7 +59,7 @@ PWA 还可以离线工作。使用 Service Workers，你可以选择性地缓存
 
 工作原理图示
 
-[![pic01.png](https://i.loli.net/2018/04/24/5adee305aca48.png)](https://i.loli.net/2018/04/24/5adee305aca48.png)
+![原理图](https://raw.githubusercontent.com/SangKa/PWA-Book-CN/master/assets/figure1.3.png)
 
 于是我们得出几点：
 1. Service Worker 运行在 worker 上下文中，这意味着它无法访问 DOM，它与应用的主要 JavaScript 运行在不同的线程上，所以它不会被阻塞。
