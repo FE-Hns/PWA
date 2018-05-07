@@ -167,6 +167,14 @@ self.addEventListener('fetch', function(event) {
 ![第二步](https://raw.githubusercontent.com/SangKa/PWA-Book-CN/master/assets/figure2.6.png)
 
 
+## 3.1 HTTP的缓存基础
+
+现代的浏览器就仿佛当前的智能手机，非常聪明。打一个比方，将浏览器比作冰箱，当冰箱里边的牛奶没有过期，我们就不用采购，直到牛奶过期了之后，我们才需要进行采购。
+
+对于浏览器来说，可以根据缓存的过期时间，来判断是否需要进行重新向服务器发送请求，请求新的数据。如果没有过期那么只需要走本地的缓存即可，如果缓存过期了，那么需要向服务器发送请求。
+
+
+
 
 
 
