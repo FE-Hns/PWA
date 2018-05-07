@@ -1,1 +1,1 @@
-console.log("首次尝试加载文件")
+console.log("javascript file is added!");
