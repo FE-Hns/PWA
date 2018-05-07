@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hello,world!</title>
+  </head>
+  <body>
+    <!-- 通用的图片资源 -->
+    <img src="./img/pic01.png" alt="">
+    <!-- 通用的js -->
+    <script async src="./js/script.js"></script>
+    <script>
+        // 注册 service worker
+        if ('serviceWorker' in navigator) {             
+          navigator.serviceWorker.register('./service-worker.js').then(function (registration) {
+            // 注册成功
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }).catch(function (err) {                     
+            // 注册失败 :(
+            console.log('ServiceWorker registration failed: ', err);
+          });
+        }
+      </script>
+</body>
+</html>
