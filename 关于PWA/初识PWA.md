@@ -183,6 +183,87 @@ self.addEventListener('fetch', function(event) {
 
 Service Workers 的强大在于它们拦截 HTTP 请求的能力。在本章中，我们将使用这种拦截 HTTP 请求和响应的能力，从而为用户提供直接来自缓存的超快速响应！
 
+### 3.2.1 在安装过程中进行预缓存
+
+
+使用 Service Workers，你可以进入任何传入的 HTTP 请求，并决定想要如何响应。在你的 Service Worker 中，可以编写逻辑来决定想要缓存的资源，以及需要满足什么条件和资源需要缓存多久。一切尽归你掌控！
+
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hello,world!</title>
+  </head>
+  <body>
+    <!-- 通用的图片资源 -->
+    <img src="./img/pic.png" alt="">
+    <!-- 通用的js -->
+    <script async src="./js/script.js"></script>
+    <script>
+        // 注册 service worker
+        if ('serviceWorker' in navigator) {             
+          navigator.serviceWorker.register('./service-worker.js').then(function (registration) {
+            // 注册成功
+            console.log('ServiceWorker registration successful with scope: ', registration.scope);
+          }).catch(function (err) {                     
+            // 注册失败 :(
+            console.log('ServiceWorker registration failed: ', err);
+          });
+        }
+      </script>
+</body>
+</html>
+```
+
+```js
+// service-worker.js 
+// 代码清单3.2
+var cacheName = 'helloWorld';                
+self.addEventListener('install', event => {  
+  event.waitUntil(
+    caches.open(cacheName)                   
+    .then(cache => cache.addAll([            
+      '/js/script.js',
+      '/images/hello.png'
+    ]))
+  );
+});
+```
+1. 缓存的名称
+2. 我们将进入 Service Worker 的安装事件
+3. 使用我们指定的缓存名称来打开缓存
+4. 把 JavaScript 和 图片文件添加到缓存中
+
+在第1章中，我们看过了 Service Worker 生命周期和它激活之前所经历的不同阶段。其中一个阶段就是 install 事件，它发生在浏览器安装并注册 Service Worker 时。这是把资源添加到缓存中的绝佳时间，在后面的阶段可能会用到这些资源。例如，如果我知道某个 JavaScript 文件可能整个网站都会使用它，我们就可以在安装期间缓存它。这意味着另一个引用此 JavaScript 文件的页面能够在后面的阶段轻松地从缓存中获取文件。
+
+清单3.2中的代码进入了 install 事件，并在此阶段将 JavaScript 文件和 hello 图片添加到缓存中。在上面的清单中，我还引用了一个叫做 cacheName 的变量。这是一个字符串，我用它来设置缓存的名称。你可以为每个缓存取不同的名称，甚至可以拥有一个缓存的多个不同的副本，因为每个新的字符串使其唯一。当看到本章后面的版本控制和缓存清除时，你将会感受到它所带来的便利。
+
+如果所有的文件都成功缓存了，那么 Service Worker 便会安装完成。如果任何文件下载失败了，那么安装过程也会随之失败。这点非常重要，因为它意味着你需要依赖的所有资源都存在于服务器中，并且你需要注意决定在安装步骤中缓存的文件列表。定义一个很长的文件列表便会增加缓存失败的几率，多一个文件便多一份风险，从而导致你的 Servicer Worker 无法安装。
+
+现在我们的缓存已经准备好了，我们能够开始从中读取资源。我们需要在清单3.3中添加代码，让 Service Worker 开始监听 fetch 事件。
+
+```js
+// 代码清单3.3
+self.addEventListener('fetch', function (event) {  
+  event.respondWith(
+    caches.match(event.request)                    
+    .then(function (response) {
+      if (response) {                              
+        return response;                           
+      }
+      return fetch(event.request);                 
+    })
+  );
+});
+```
+1. 添加 fetch 事件的事件监听器
+2. 检查传入的请求 URL 是否匹配当前缓存中存在的任何内容
+3. 如果有 response 并且它不是 undefined 或 null 的话就将它返回
+4. 否则只是如往常一样继续，通过网络获取预期的资源
+
 
 
 
